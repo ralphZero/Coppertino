@@ -7,7 +7,26 @@
     tools:context=".MainActivity" >
 
     <include
+        android:id="@+id/mToolbar"
         layout="@layout/toolbar"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true" />
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/vwPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/mToolbar">
+
+        <androidx.viewpager.widget.PagerTabStrip
+            android:id="@+id/pageHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp" />
+
+    </androidx.viewpager.widget.ViewPager>
+
 </RelativeLayout>
