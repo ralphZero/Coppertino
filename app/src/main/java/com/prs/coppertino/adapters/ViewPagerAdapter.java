@@ -1,5 +1,10 @@
 package com.prs.coppertino.adapters;
 
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.RelativeSizeSpan;
+import android.text.style.TextAppearanceSpan;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -10,9 +15,11 @@ import com.prs.coppertino.fragments.SongsFragment;
 public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     private static int NUM_ITEMS = 2;
+    private String[] tabTitles = new String[]{"Albums", "Songs"};
 
     public ViewPagerAdapter(FragmentManager fm) {
         super(fm);
+
     }
 
     @Override
@@ -36,6 +43,8 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     // Returns the page title for the top indicator
     @Override
     public CharSequence getPageTitle(int position) {
-        return "Page " + position;
+        SpannableString string = new SpannableString(tabTitles[position]);
+        string.setSpan(new RelativeSizeSpan(1.5f),0,tabTitles[position].length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return string;
     }
 }
