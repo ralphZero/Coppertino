@@ -1,33 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity" >
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MainActivity">
 
-    <include
-        android:id="@+id/mToolbar"
-        layout="@layout/toolbar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true" />
-
-    <com.astuetz.PagerSlidingTabStrip
-        android:id="@+id/pageHeader"
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="52dp"
-        android:layout_below="@id/mToolbar"
-        android:background="#FFFFFF"
-        android:textColor="@color/colorPrimaryDark"
-        app:pstsDividerColor="@color/colorPrimary"
-        app:pstsIndicatorColor="@color/colorWhite"
-        app:pstsIndicatorHeight="2dp"
-        app:pstsUnderlineColor="@color/colorWhite" />
+        android:layout_height="wrap_content">
 
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/vwPager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/pageHeader"/>
-</RelativeLayout>
+        <include
+            android:id="@+id/mToolbar"
+            layout="@layout/toolbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <include layout="@layout/content_main"/>
+    <include layout="@layout/now_playing_sheet"/>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
