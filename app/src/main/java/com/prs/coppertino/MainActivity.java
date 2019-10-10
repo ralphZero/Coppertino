@@ -4,9 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
-import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -42,16 +41,17 @@ public class MainActivity extends AppCompatActivity {
         tabStrip.setViewPager(viewPager);
 
         mTabsLinearLayout = ((LinearLayout) tabStrip.getChildAt(0));
+        mTabsLinearLayout.setPadding(0,0,0,0);
         for(int i=0; i < mTabsLinearLayout.getChildCount(); i++){
             TextView tv = (TextView) mTabsLinearLayout.getChildAt(i);
-
+            tv.setPadding(0,0,0,0);
+            tv.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/roboto__light.ttf"));
             if(i == 0){
                 tv.setTextSize(22f);
             } else {
                 tv.setTextSize(14f);
             }
         }
-
         tabStrip.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -62,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
             public void onPageSelected(int position) {
                 for(int i=0; i < mTabsLinearLayout.getChildCount(); i++){
                     TextView tv = (TextView) mTabsLinearLayout.getChildAt(i);
+                    tv.setPadding(0,0,0,0);
+                    tv.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/roboto__light.ttf"));
                     if(i == position){
                         tv.setTextSize(22f);
                     } else {
