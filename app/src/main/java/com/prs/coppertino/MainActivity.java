@@ -10,14 +10,12 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.Manifest;
 import android.content.ContentResolver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
@@ -32,7 +30,6 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.prs.coppertino.adapters.ViewPagerAdapter;
 import com.prs.coppertino.models.Song;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
     BottomSheetBehavior sheetBehavior;
     LinearLayout mTabsLinearLayout;
     ViewPagerAdapter adapter;
-    List<String> list;
+    List<Song> list;
     private boolean hasPermission = false;
 
     @Override
@@ -74,11 +71,10 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         checkPermissions();
+        list = new ArrayList<>();
 
         ViewPageInit();
         BottomSheetInit();
-
-        list = new ArrayList<>();
 
         if(hasPermission){
             Log.d(TAG,"Has permission");
@@ -96,17 +92,24 @@ public class MainActivity extends AppCompatActivity {
         if(songCursor!=null && songCursor.moveToFirst()){
             int songTitle = songCursor.getColumnIndex(MediaStore.Audio.Media.TITLE);
             int songArtist = songCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST);
-            int songPath = songCursor.getColumnIndexOrThrow("_data");
+            int songDisplayName = songCursor.getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME);
+            int songDuration = songCursor.getColumnIndex(MediaStore.Audio.Media.DURATION);
+            int songAlbum = songCursor.getColumnIndex(MediaStore.Audio.Media.ALBUM);
+            int songPath = songCursor.getColumnIndex("_data");
 
             do{
-                String currentTitle = songCursor.getString(songTitle);
-                String currentArtist = songCursor.getString(songArtist);
-                String currentPath = songCursor.getString(songPath);
-                list.add(currentTitle+"\n"+currentArtist+" path: "+currentPath);
+                Song song = new Song();
+                song.setTitle(songCursor.getString(songTitle));
+                song.setArtist(songCursor.getString(songArtist));
+                song.setDisplayName(songCursor.getString(songDisplayName));
+                song.setAlbum(songCursor.getString(songAlbum));
+                song.setDuration(songCursor.getString(songDuration));
+                song.setPath(songCursor.getString(songPath));
+                list.add(song);
 
             }while (songCursor.moveToNext());
             songCursor.close();
-            Log.d(TAG,"List: "+list.get(0).toString());
+            Log.d(TAG,"List: "+list.get(0).getAlbum());
         }
     }
 

@@ -10,12 +10,19 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.prs.coppertino.R;
+import com.prs.coppertino.adapters.ArtistsAdapter;
+import com.prs.coppertino.models.Song;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ArtistsFragment extends Fragment {
 
     // Store instance variables
     private String title;
     private int page;
+    List<Song> songList;
+    ArtistsAdapter adapter;
 
     // newInstance constructor for creating fragment with arguments
     public static ArtistsFragment newInstance(int page, String title) {
@@ -38,7 +45,20 @@ public class ArtistsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_artists,container,false);
-        return view;
+        return inflater.inflate(R.layout.fragment_artists,container,false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        songList = new ArrayList<>();
+        adapter = new ArtistsAdapter(getActivity(),songList);
+    }
+
+    public void fetchListFromParent(List<Song> list){
+        if(isAdded()){
+            songList = list;
+            adapter.notifyDataSetChanged();
+        }
     }
 }
