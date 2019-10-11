@@ -28,6 +28,9 @@ import android.widget.TextView;
 import com.astuetz.PagerSlidingTabStrip;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.prs.coppertino.adapters.ViewPagerAdapter;
+import com.prs.coppertino.fragments.AlbumFragment;
+import com.prs.coppertino.fragments.ArtistsFragment;
+import com.prs.coppertino.fragments.SongsFragment;
 import com.prs.coppertino.models.Song;
 
 import java.util.ArrayList;
@@ -109,7 +112,16 @@ public class MainActivity extends AppCompatActivity {
 
             }while (songCursor.moveToNext());
             songCursor.close();
-            Log.d(TAG,"List: "+list.get(0).getAlbum());
+
+            Log.d(TAG,"List: "+list.size());
+
+            //Calling fetchFromParent for all fragments
+            AlbumFragment albumFragment = (AlbumFragment) adapter.getRegisteredFragment(0);
+            albumFragment.fetchListFromParent(list);
+            SongsFragment songsFragment = (SongsFragment) adapter.getRegisteredFragment(1);
+            songsFragment.fetchListFromParent(list);
+            ArtistsFragment artistsFragment = (ArtistsFragment) adapter.getRegisteredFragment(2);
+            artistsFragment.fetchListFromParent(list);
         }
     }
 

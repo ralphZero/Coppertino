@@ -13,7 +13,7 @@ import com.prs.coppertino.fragments.AlbumFragment;
 import com.prs.coppertino.fragments.ArtistsFragment;
 import com.prs.coppertino.fragments.SongsFragment;
 
-public class ViewPagerAdapter extends FragmentPagerAdapter {
+public class ViewPagerAdapter extends SmartFragmentStatePagerAdapter {
 
     private static int NUM_ITEMS = 3;
     private String[] tabTitles = new String[]{"Albums", "Songs","Artists"};
