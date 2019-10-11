@@ -5,7 +5,7 @@
     android:id="@+id/bottomSheet"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:elevation="10dp"
+    android:elevation="8dp"
     android:background="#FFFFFF"
     app:behavior_hideable="false"
     app:behavior_peekHeight="70dp"
@@ -26,10 +26,12 @@
 
             <SeekBar
                 android:id="@+id/sheetSeekBar"
+                style="@style/Widget.AppCompat.SeekBar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="5dp" />
+                android:layout_marginBottom="5dp"
+                android:progressTint="@color/colorAccent" />
 
             <TextView
                 android:id="@+id/sheetMusicCurrentTime"
@@ -69,7 +71,7 @@
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/button"
                 android:scaleType="centerCrop"
-                app:srcCompat="@drawable/ic_skip_previous_black_24dp" />
+                app:srcCompat="@drawable/previous_button" />
 
             <ImageButton
                 android:id="@+id/sheetPlayButton"
@@ -80,9 +82,9 @@
                 android:layout_marginEnd="20dp"
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/button"
-                android:elevation="5dp"
+                android:elevation="6dp"
                 android:scaleType="centerCrop"
-                app:srcCompat="@drawable/ic_play_circle_filled_black_24dp" />
+                app:srcCompat="@drawable/play_button" />
 
             <ImageButton
                 android:id="@+id/sheetNextButton"
@@ -93,7 +95,7 @@
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/button"
                 android:scaleType="centerCrop"
-                app:srcCompat="@drawable/ic_skip_next_black_24dp" />
+                app:srcCompat="@drawable/next_button" />
 
         </RelativeLayout>
 
@@ -102,7 +104,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/sheetAlbum"
-            android:fontFamily="@font/roboto_thin"
+            android:fontFamily="@font/roboto_light"
             android:gravity="center_horizontal"
             android:text="@string/rick_ross"
             android:textColor="@color/colorAccent"
@@ -184,7 +186,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ellipsize="marquee"
-                    android:fontFamily="@font/roboto_thin"
+                    android:fontFamily="@font/roboto_light"
                     android:singleLine="true"
                     android:text="@string/rick_ross"
                     android:textAlignment="viewStart"
@@ -209,7 +211,7 @@
                     android:contentDescription="@string/button"
                     android:elevation="5dp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/ic_skip_previous_black_24dp" />
+                    android:src="@drawable/previous_button" />
 
                 <ImageButton
                     android:id="@+id/tbNowPlayingPlay"
@@ -221,7 +223,7 @@
                     android:contentDescription="@string/button"
                     android:elevation="5dp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/ic_play_circle_filled_black_24dp" />
+                    android:src="@drawable/play_button" />
 
                 <ImageButton
                     android:id="@+id/tbNowPlayingNext"
@@ -233,7 +235,7 @@
                     android:contentDescription="@string/button"
                     android:elevation="5dp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/ic_skip_next_black_24dp" />
+                    android:src="@drawable/next_button" />
             </LinearLayout>
 
             <de.hdodenhof.circleimageview.CircleImageView
@@ -257,15 +259,14 @@
                     android:id="@+id/sheetCollapseToggle"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
-                    android:layout_centerInParent="false"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="10dp"
                     android:background="@android:color/transparent"
                     android:contentDescription="@string/button"
                     android:elevation="5dp"
                     android:scaleType="centerCrop"
-                    android:visibility="gone"
-                    app:srcCompat="@drawable/ic_keyboard_arrow_down_black_24dp" />
+                    android:visibility="visible"
+                    app:srcCompat="@drawable/hide_button" />
             </RelativeLayout>
 
         </RelativeLayout>
