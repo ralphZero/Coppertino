@@ -1,6 +1,8 @@
 package com.prs.coppertino.adapters;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.provider.MediaStore;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
@@ -14,6 +16,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.prs.coppertino.R;
 import com.prs.coppertino.models.Song;
 
@@ -39,7 +42,13 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongsViewHol
     @Override
     public void onBindViewHolder(@NonNull SongsViewHolder holder, int position) {
         Song song = songList.get(position);
-        holder.songCover.setImageResource(R.drawable.song_placeholder);
+        //holder.songCover.setImageResource(R.drawable.song_placeholder);
+
+        Glide.with(context)
+                .load(getAlbumArtFromId(song.getAlbumId()))
+                .placeholder(R.drawable.song_placeholder)
+                .into(holder.songCover);
+
         holder.songTitle.setText(song.getTitle());
 
         ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(context.getResources().getColor(R.color.colorAccent));
@@ -60,6 +69,22 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongsViewHol
     @Override
     public int getItemCount() {
         return songList.size();
+    }
+
+    private String getAlbumArtFromId(String mAlbumId) {
+        Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
+                new String[] {MediaStore.Audio.Albums.ALBUM_ART},
+                MediaStore.Audio.Albums._ID+ "=?",
+                new String[] {String.valueOf(mAlbumId)},
+                null);
+
+        if (cursor!=null && cursor.moveToFirst()) {
+            String path = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART));
+            cursor.close();
+            // do whatever you need to do
+            return path;
+        }
+        return null;
     }
 
 

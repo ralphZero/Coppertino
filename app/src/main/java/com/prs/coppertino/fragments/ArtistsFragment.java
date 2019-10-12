@@ -15,7 +15,6 @@ import com.prs.coppertino.MainActivity;
 import com.prs.coppertino.R;
 import com.prs.coppertino.adapters.ArtistsAdapter;
 import com.prs.coppertino.models.Artist;
-import com.prs.coppertino.models.Song;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,6 +65,6 @@ public class ArtistsFragment extends Fragment {
         rvArtist.setLayoutManager(gridLayoutManager);
         rvArtist.setAdapter(adapter);
 
-        adapter.addListToAdapter(((MainActivity) getActivity()).GetAllArtistData());
+        adapter.addListToAdapter(((MainActivity) getActivity()).getAllArtistData());
     }
 }

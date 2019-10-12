@@ -1,6 +1,8 @@
 package com.prs.coppertino.adapters;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.prs.coppertino.R;
 import com.prs.coppertino.models.Album;
 
@@ -36,7 +39,11 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.AlbumViewHol
     @Override
     public void onBindViewHolder(@NonNull AlbumViewHolder holder, int position) {
         Album a = albumList.get(position);
-        holder.albumCover.setImageResource(R.drawable.album_placeholder);
+        Glide.with(context)
+                .load(getAlbumArtFromId(a.getAlbumId()))
+                .placeholder(R.drawable.album_placeholder)
+                .into(holder.albumCover);
+        //holder.albumCover.setImageResource(R.drawable.album_placeholder);
         holder.albumTitle.setText(a.getAlbumTitle());
         holder.albumArtist.setText(a.getAlbumArtist());
     }
@@ -45,6 +52,22 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.AlbumViewHol
         albumList.clear();
         albumList.addAll(list);
         notifyDataSetChanged();
+    }
+
+    private String getAlbumArtFromId(String mAlbumId) {
+        Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
+                new String[] {MediaStore.Audio.Albums.ALBUM_ART},
+                MediaStore.Audio.Albums._ID+ "=?",
+                new String[] {String.valueOf(mAlbumId)},
+                null);
+
+        if (cursor!=null && cursor.moveToFirst()) {
+            String path = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART));
+            cursor.close();
+            // do whatever you need to do
+            return path;
+        }
+        return null;
     }
 
     @Override

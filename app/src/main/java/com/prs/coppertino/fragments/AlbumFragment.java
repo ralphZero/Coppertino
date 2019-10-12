@@ -15,7 +15,6 @@ import com.prs.coppertino.MainActivity;
 import com.prs.coppertino.R;
 import com.prs.coppertino.adapters.AlbumAdapter;
 import com.prs.coppertino.models.Album;
-import com.prs.coppertino.models.Song;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +65,7 @@ public class AlbumFragment extends Fragment {
         rvAlbums.setLayoutManager(gridLayoutManager);
         rvAlbums.setAdapter(adapter);
 
-        adapter.addListToAdapter(((MainActivity) getActivity()).GetAllAlbumData());
+        adapter.addListToAdapter(((MainActivity) getActivity()).getAllAlbumData());
     }
 
 }

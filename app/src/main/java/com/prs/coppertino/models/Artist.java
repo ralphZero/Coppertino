@@ -3,7 +3,7 @@ package com.prs.coppertino.models;
 public class Artist {
     private String artistName;
     private String artistNumberOfAlbums;
-    private String artistKey;
+    private String artistId;
 
     public Artist() {
     }
@@ -24,11 +24,11 @@ public class Artist {
         this.artistNumberOfAlbums = artistNumberOfAlbums;
     }
 
-    public String getArtistKey() {
-        return artistKey;
+    public String getArtistId() {
+        return artistId;
     }
 
-    public void setArtistKey(String artistKey) {
-        this.artistKey = artistKey;
+    public void setArtistId(String artistId) {
+        this.artistId = artistId;
     }
 }

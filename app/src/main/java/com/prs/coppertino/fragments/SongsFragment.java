@@ -63,6 +63,6 @@ public class SongsFragment extends Fragment {
         rvSongs.setLayoutManager(new LinearLayoutManager(getActivity(),RecyclerView.VERTICAL,false));
         rvSongs.setAdapter(adapter);
 
-        adapter.addListToAdapter(((MainActivity) getActivity()).GetAllSongData());
+        adapter.addListToAdapter(((MainActivity) getActivity()).getAllSongData());
     }
 }

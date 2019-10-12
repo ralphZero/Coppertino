@@ -5,7 +5,7 @@ public class Album {
     private String albumId;
     private String albumTitle;
     private String albumArtist;
-    //todo: private String albumArt;
+    private String albumArt;
 
 
     public Album() {
@@ -33,5 +33,13 @@ public class Album {
 
     public void setAlbumArtist(String albumArtist) {
         this.albumArtist = albumArtist;
+    }
+
+    public String getAlbumArt() {
+        return albumArt;
+    }
+
+    public void setAlbumArt(String albumArt) {
+        this.albumArt = albumArt;
     }
 }

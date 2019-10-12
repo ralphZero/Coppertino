@@ -15,7 +15,6 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Typeface;
 import android.net.Uri;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -28,11 +27,7 @@ import android.widget.TextView;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.prs.coppertino.adapters.SmartFragmentStatePagerAdapter;
 import com.prs.coppertino.adapters.ViewPagerAdapter;
-import com.prs.coppertino.fragments.AlbumFragment;
-import com.prs.coppertino.fragments.ArtistsFragment;
-import com.prs.coppertino.fragments.SongsFragment;
 import com.prs.coppertino.models.Album;
 import com.prs.coppertino.models.Artist;
 import com.prs.coppertino.models.Song;
@@ -82,41 +77,57 @@ public class MainActivity extends AppCompatActivity {
 
         checkPermissions();
 
-        ViewPageInit();
-        BottomSheetInit();
+        viewPageInit();
+        bottomSheetInit();
 
     }
 
-    public List<Song> GetAllSongData() {
+
+
+    public List<Song> getAllSongData() {
         if(hasPermission){
             Log.d(TAG,"Songs has permission");
 
             List<Song> list = new ArrayList<>();
 
+            String[] projection = new String[]{
+                    MediaStore.Audio.Media.TITLE,
+                    MediaStore.Audio.Media.ARTIST,
+                    MediaStore.Audio.Media.ALBUM,
+                    MediaStore.Audio.Media.DATA,
+                    MediaStore.Audio.Media.ALBUM_ID
+            };
+
             String selection = MediaStore.Audio.Media.IS_MUSIC + " != 0";
             String sortOrder = MediaStore.Audio.Media.DEFAULT_SORT_ORDER;
             ContentResolver resolver = getContentResolver();
             Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-            Cursor songCursor = resolver.query(uri,null,selection,null,sortOrder);
+            Cursor songCursor = resolver.query(uri,projection,selection,null,sortOrder);
 
             if(songCursor!=null && songCursor.moveToFirst()){
                 int songTitle = songCursor.getColumnIndex(MediaStore.Audio.Media.TITLE);
                 int songArtist = songCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST);
                 int songAlbum = songCursor.getColumnIndex(MediaStore.Audio.Media.ALBUM);
+                int songAlbumId = songCursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID);
                 int songPath = songCursor.getColumnIndex("_data");
 
                 do{
+                    //todo: call a function that gonna fetch albumArt with the provided albumId (done in listview)
+                    //then we add the albumArt string to the Song object
+                    //String songAlbumArt = getAlbumArtFromId(songCursor.getString(songAlbumId));
                     Song song = new Song();
                     song.setTitle(songCursor.getString(songTitle));
                     song.setArtist(songCursor.getString(songArtist));
                     song.setAlbum(songCursor.getString(songAlbum));
                     song.setPath(songCursor.getString(songPath));
+                    song.setAlbumId(songCursor.getString(songAlbumId));
+                    //song.setAlbumArt(songAlbumArt);
                     list.add(song);
 
                 }while (songCursor.moveToNext());
                 songCursor.close();
 
-                Log.d(TAG,"List: "+list.size());
+                Log.d(TAG,"SongList: "+list.get(0).getAlbum());
 
                 return list;
             }
@@ -124,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
         return null;
     }
 
-    public List<Album> GetAllAlbumData(){
+    public List<Album> getAllAlbumData(){
         if(hasPermission){
             List<Album> albumList = new ArrayList<>();
 
@@ -133,6 +144,7 @@ public class MainActivity extends AppCompatActivity {
                     MediaStore.Audio.Albums._ID,
                     MediaStore.Audio.Albums.ALBUM,
                     MediaStore.Audio.Albums.ARTIST,
+                    //MediaStore.Audio.Albums.ALBUM_ART
             };
 
             String sortOrder = MediaStore.Audio.Media.ALBUM + " ASC";
@@ -141,6 +153,7 @@ public class MainActivity extends AppCompatActivity {
                 int albumId = cursor.getColumnIndex(MediaStore.Audio.Albums._ID);
                 int albumTitle = cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM);
                 int albumArtist = cursor.getColumnIndex(MediaStore.Audio.Albums.ARTIST);
+                //int albumArt = cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART);
 
                 do{
 
@@ -148,6 +161,7 @@ public class MainActivity extends AppCompatActivity {
                     album.setAlbumId(cursor.getString(albumId));
                     album.setAlbumTitle(cursor.getString(albumTitle));
                     album.setAlbumArtist(cursor.getString(albumArtist));
+                    //album.setAlbumArt(cursor.getString(albumArt));
                     albumList.add(album);
 
                 }while (cursor.moveToNext());
@@ -161,14 +175,14 @@ public class MainActivity extends AppCompatActivity {
         return null;
     }
 
-    public List<Artist> GetAllArtistData(){
+    public List<Artist> getAllArtistData(){
         if(hasPermission){
 
             List<Artist> artistList = new ArrayList<>();
             ContentResolver resolver = getContentResolver();
 
             String[] projection = new String[] {
-                    MediaStore.Audio.Artists.ARTIST_KEY,
+                    MediaStore.Audio.Artists._ID,
                     MediaStore.Audio.Artists.ARTIST,
                     MediaStore.Audio.Artists.NUMBER_OF_ALBUMS
             };
@@ -176,14 +190,14 @@ public class MainActivity extends AppCompatActivity {
             String sortOrder = MediaStore.Audio.Media.ARTIST + " ASC";
             Cursor cursor = resolver.query(MediaStore.Audio.Artists.EXTERNAL_CONTENT_URI, projection, null, null, sortOrder);
             if(cursor!=null && cursor.moveToFirst()){
-                int artistKey = cursor.getColumnIndex(MediaStore.Audio.Artists.ARTIST_KEY);
+                int artistKey = cursor.getColumnIndex(MediaStore.Audio.Artists._ID);
                 int artistName = cursor.getColumnIndex(MediaStore.Audio.Artists.ARTIST);
                 int artistNumberOfAlbum = cursor.getColumnIndex(MediaStore.Audio.Artists.NUMBER_OF_ALBUMS);
 
                 do{
 
                     Artist artist = new Artist();
-                    artist.setArtistKey(cursor.getString(artistKey));
+                    artist.setArtistId(cursor.getString(artistKey));
                     artist.setArtistName(cursor.getString(artistName));
                     artist.setArtistNumberOfAlbums(cursor.getString(artistNumberOfAlbum));
 
@@ -192,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
                 }while (cursor.moveToNext());
                 cursor.close();
 
-                Log.d(TAG,"AlbumList: "+artistList.get(0).getArtistName()+"\n"+artistList.get(0).getArtistNumberOfAlbums());
+                Log.d(TAG,"ArtistList: "+artistList.get(0).getArtistName()+"\n"+artistList.get(0).getArtistNumberOfAlbums());
 
                 return artistList;
             }
@@ -200,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
         return null;
     }
 
-    private void BottomSheetInit() {
+    private void bottomSheetInit() {
         sheetCollapseToggle.setVisibility(View.GONE);
 
         nowPlayingButtonsLayout.setVisibility(View.VISIBLE);
@@ -260,7 +274,7 @@ public class MainActivity extends AppCompatActivity {
             sheetCollapseToggle.setVisibility(View.VISIBLE);
     }
 
-    private void ViewPageInit() {
+    private void viewPageInit() {
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
         tabStrip.setViewPager(viewPager);

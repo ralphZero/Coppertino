@@ -1,6 +1,9 @@
 package com.prs.coppertino.adapters;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.prs.coppertino.R;
 import com.prs.coppertino.models.Artist;
 
@@ -37,7 +41,13 @@ public class ArtistsAdapter extends RecyclerView.Adapter<ArtistsAdapter.ArtistVi
     @Override
     public void onBindViewHolder(@NonNull ArtistViewHolder holder, int position) {
         Artist artist = artistList.get(position);
-        holder.artistImg.setImageResource(R.drawable.artist_placeholder);
+        //holder.artistImg.setImageResource(R.drawable.artist_placeholder);
+
+        Glide.with(context)
+                .load(getAlbumArtFromId(artist.getArtistId()))
+                .placeholder(R.drawable.artist_placeholder)
+                .into(holder.artistImg);
+
         holder.artisteName.setText(artist.getArtistName());
         String artistNOA;
         if(Integer.parseInt(artist.getArtistNumberOfAlbums())<= 1)
@@ -52,18 +62,37 @@ public class ArtistsAdapter extends RecyclerView.Adapter<ArtistsAdapter.ArtistVi
         artistList.addAll(list);
     }
 
+    private String getAlbumArtFromId(String mArtistId) {
+        Uri uri = MediaStore.Audio.Artists.Albums.getContentUri("external",Long.parseLong(mArtistId));
+        String[] projection = new String[]{
+                MediaStore.Audio.Artists.Albums.ALBUM_ART
+        };
+        Cursor cursor = context.getContentResolver().query(uri,projection,
+                /*MediaStore.Audio.Artists.Albums.ARTIST_ID+ "=?"*/null,
+                /*new String[] {String.valueOf(mArtistId)}*/null,
+                MediaStore.Audio.Artists.Albums.ALBUM_KEY + " LIMIT 1");
+
+        if (cursor!=null && cursor.moveToFirst()) {
+            String path = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART));
+            cursor.close();
+            // do whatever you need to do
+            return path;
+        }
+        return null;
+    }
+
     @Override
     public int getItemCount() {
         return artistList.size();
     }
 
-    public class ArtistViewHolder extends RecyclerView.ViewHolder {
+    class ArtistViewHolder extends RecyclerView.ViewHolder {
 
         CircleImageView artistImg;
         TextView artisteName;
         TextView artistNumberOfAlbum;
 
-        public ArtistViewHolder(@NonNull View itemView) {
+        ArtistViewHolder(@NonNull View itemView) {
             super(itemView);
 
             artistImg = itemView.findViewById(R.id.artistCardImg);

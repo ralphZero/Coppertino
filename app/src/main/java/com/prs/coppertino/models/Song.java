@@ -5,7 +5,8 @@ public class Song {
     private String title;
     private String album;
     private String artist;
-    //todo: Album art
+    private String albumArt;
+    private String albumId;
 
     public Song() {
     }
@@ -40,5 +41,21 @@ public class Song {
 
     public void setArtist(String artist) {
         this.artist = artist;
+    }
+
+    public String getAlbumArt() {
+        return albumArt;
+    }
+
+    public void setAlbumArt(String albumArt) {
+        this.albumArt = albumArt;
+    }
+
+    public String getAlbumId() {
+        return albumId;
+    }
+
+    public void setAlbumId(String albumId) {
+        this.albumId = albumId;
     }
 }
