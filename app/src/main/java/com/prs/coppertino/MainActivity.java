@@ -15,6 +15,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -27,6 +28,7 @@ import android.widget.TextView;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.prs.coppertino.adapters.SmartFragmentStatePagerAdapter;
 import com.prs.coppertino.adapters.ViewPagerAdapter;
 import com.prs.coppertino.fragments.AlbumFragment;
 import com.prs.coppertino.fragments.ArtistsFragment;
@@ -42,6 +44,7 @@ import butterknife.ButterKnife;
 public class MainActivity extends AppCompatActivity {
 
     private static final int MY_PERMISSIONS_REQUEST = 123;
+
     public static final String TAG = "MyActivity";
     @BindView(R.id.toolbar)
             Toolbar toolbar;
@@ -61,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
     BottomSheetBehavior sheetBehavior;
     LinearLayout mTabsLinearLayout;
     ViewPagerAdapter adapter;
-    List<Song> list;
+
     private boolean hasPermission = false;
 
     @Override
@@ -74,55 +77,50 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         checkPermissions();
-        list = new ArrayList<>();
 
         ViewPageInit();
         BottomSheetInit();
 
-        if(hasPermission){
-            Log.d(TAG,"Has permission");
-            GetAllMusicData();
-        }
-
     }
 
-    private void GetAllMusicData() {
-        String selection = MediaStore.Audio.Media.IS_MUSIC + " != 0";
-        ContentResolver resolver = getContentResolver();
-        Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-        Cursor songCursor = resolver.query(uri,null,selection,null,null);
+    public List<Song> GetAllMusicData() {
+        if(hasPermission){
+            Log.d(TAG,"Has permission");
 
-        if(songCursor!=null && songCursor.moveToFirst()){
-            int songTitle = songCursor.getColumnIndex(MediaStore.Audio.Media.TITLE);
-            int songArtist = songCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST);
-            int songDisplayName = songCursor.getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME);
-            int songDuration = songCursor.getColumnIndex(MediaStore.Audio.Media.DURATION);
-            int songAlbum = songCursor.getColumnIndex(MediaStore.Audio.Media.ALBUM);
-            int songPath = songCursor.getColumnIndex("_data");
+            List<Song> list = new ArrayList<>();
 
-            do{
-                Song song = new Song();
-                song.setTitle(songCursor.getString(songTitle));
-                song.setArtist(songCursor.getString(songArtist));
-                song.setDisplayName(songCursor.getString(songDisplayName));
-                song.setAlbum(songCursor.getString(songAlbum));
-                song.setDuration(songCursor.getString(songDuration));
-                song.setPath(songCursor.getString(songPath));
-                list.add(song);
+            String selection = MediaStore.Audio.Media.IS_MUSIC + " != 0";
+            ContentResolver resolver = getContentResolver();
+            Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+            Cursor songCursor = resolver.query(uri,null,selection,null,null);
 
-            }while (songCursor.moveToNext());
-            songCursor.close();
+            if(songCursor!=null && songCursor.moveToFirst()){
+                int songTitle = songCursor.getColumnIndex(MediaStore.Audio.Media.TITLE);
+                int songArtist = songCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST);
+                int songDisplayName = songCursor.getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME);
+                int songDuration = songCursor.getColumnIndex(MediaStore.Audio.Media.DURATION);
+                int songAlbum = songCursor.getColumnIndex(MediaStore.Audio.Media.ALBUM);
+                int songPath = songCursor.getColumnIndex("_data");
 
-            Log.d(TAG,"List: "+list.size());
+                do{
+                    Song song = new Song();
+                    song.setTitle(songCursor.getString(songTitle));
+                    song.setArtist(songCursor.getString(songArtist));
+                    song.setDisplayName(songCursor.getString(songDisplayName));
+                    song.setAlbum(songCursor.getString(songAlbum));
+                    song.setDuration(songCursor.getString(songDuration));
+                    song.setPath(songCursor.getString(songPath));
+                    list.add(song);
 
-            //Calling fetchFromParent for all fragments
-            AlbumFragment albumFragment = (AlbumFragment) adapter.getRegisteredFragment(0);
-            albumFragment.fetchListFromParent(list);
-            SongsFragment songsFragment = (SongsFragment) adapter.getRegisteredFragment(1);
-            songsFragment.fetchListFromParent(list);
-            ArtistsFragment artistsFragment = (ArtistsFragment) adapter.getRegisteredFragment(2);
-            artistsFragment.fetchListFromParent(list);
+                }while (songCursor.moveToNext());
+                songCursor.close();
+
+                Log.d(TAG,"List: "+list.size());
+
+                return list;
+            }
         }
+        return null;
     }
 
     private void BottomSheetInit() {

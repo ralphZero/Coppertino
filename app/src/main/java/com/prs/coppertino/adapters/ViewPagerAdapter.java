@@ -5,48 +5,60 @@ import android.text.Spanned;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.TextAppearanceSpan;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import com.prs.coppertino.fragments.AlbumFragment;
 import com.prs.coppertino.fragments.ArtistsFragment;
 import com.prs.coppertino.fragments.SongsFragment;
 
-public class ViewPagerAdapter extends SmartFragmentStatePagerAdapter {
+public class ViewPagerAdapter extends FragmentPagerAdapter {
 
-    private static int NUM_ITEMS = 3;
+    //private static int NUM_ITEMS = 3;
     private String[] tabTitles = new String[]{"Albums", "Songs","Artists"};
+
+    private Fragment[] fragments;
+
+    FragmentManager manager;
 
     public ViewPagerAdapter(FragmentManager fm) {
         super(fm);
+        manager = fm;
+
+        fragments = new Fragment[]{
+                AlbumFragment.newInstance(0, "Albums"),
+                SongsFragment.newInstance(1, "Songs"),
+                ArtistsFragment.newInstance(2,"Artists")
+        };
     }
 
     @Override
     public int getCount() {
-        return NUM_ITEMS;
+        return fragments.length;
     }
 
     // Returns the fragment to display for that page
+    @NonNull
     @Override
     public Fragment getItem(int position) {
-        switch (position) {
-            case 0: // Fragment # 0 - This will show FirstFragment
-                return AlbumFragment.newInstance(0, "Albums");
-            case 1: // Fragment # 0 - This will show FirstFragment different title
-                return SongsFragment.newInstance(1, "Songs");
-            case 2:
-                return ArtistsFragment.newInstance(2,"Artists");
-            default:
-                return null;
-        }
+        return fragments[position];
+    }
+
+    public Fragment getActiveFragment(ViewPager container, int position) {
+        String name = makeFragmentName(container.getId(), position);
+        return  manager.findFragmentByTag(name);
+    }
+
+    private static String makeFragmentName(int viewId, int index) {
+        return "android:switcher:" + viewId + ":" + index;
     }
 
     // Returns the page title for the top indicator
     @Override
     public CharSequence getPageTitle(int position) {
-        /*SpannableString string = new SpannableString(tabTitles[position]);
-        string.setSpan(new RelativeSizeSpan(1.5f),0,tabTitles[position].length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);*/
         return tabTitles[position];
     }
 }

@@ -63,4 +63,6 @@ public class SongsFragment extends Fragment {
             adapter.notifyDataSetChanged();
         }
     }
+
+    public String getTitle(){return title;}
 }

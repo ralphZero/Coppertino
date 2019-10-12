@@ -61,4 +61,6 @@ public class ArtistsFragment extends Fragment {
             adapter.notifyDataSetChanged();
         }
     }
+
+    public String getTitle(){return title;}
 }
