@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.prs.coppertino.R;
 import com.prs.coppertino.models.Album;
-import com.prs.coppertino.models.Song;
 
 import java.util.List;
 
@@ -37,7 +36,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.AlbumViewHol
     @Override
     public void onBindViewHolder(@NonNull AlbumViewHolder holder, int position) {
         Album a = albumList.get(position);
-        holder.albumCover.setImageResource(R.drawable.placeholder);
+        holder.albumCover.setImageResource(R.drawable.album_placeholder);
         holder.albumTitle.setText(a.getAlbumTitle());
         holder.albumArtist.setText(a.getAlbumArtist());
     }

@@ -34,6 +34,7 @@ import com.prs.coppertino.fragments.AlbumFragment;
 import com.prs.coppertino.fragments.ArtistsFragment;
 import com.prs.coppertino.fragments.SongsFragment;
 import com.prs.coppertino.models.Album;
+import com.prs.coppertino.models.Artist;
 import com.prs.coppertino.models.Song;
 
 import java.util.ArrayList;
@@ -61,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
             LinearLayout nowPlayingButtonsLayout;
     @BindView(R.id.sheetCollapseToggle)
             ImageButton sheetCollapseToggle;
+    @BindView(R.id.bottomSheetInnerContainer)
+            RelativeLayout innerContainer;
 
     BottomSheetBehavior sheetBehavior;
     LinearLayout mTabsLinearLayout;
@@ -158,6 +161,45 @@ public class MainActivity extends AppCompatActivity {
         return null;
     }
 
+    public List<Artist> GetAllArtistData(){
+        if(hasPermission){
+
+            List<Artist> artistList = new ArrayList<>();
+            ContentResolver resolver = getContentResolver();
+
+            String[] projection = new String[] {
+                    MediaStore.Audio.Artists.ARTIST_KEY,
+                    MediaStore.Audio.Artists.ARTIST,
+                    MediaStore.Audio.Artists.NUMBER_OF_ALBUMS
+            };
+
+            String sortOrder = MediaStore.Audio.Media.ARTIST + " ASC";
+            Cursor cursor = resolver.query(MediaStore.Audio.Artists.EXTERNAL_CONTENT_URI, projection, null, null, sortOrder);
+            if(cursor!=null && cursor.moveToFirst()){
+                int artistKey = cursor.getColumnIndex(MediaStore.Audio.Artists.ARTIST_KEY);
+                int artistName = cursor.getColumnIndex(MediaStore.Audio.Artists.ARTIST);
+                int artistNumberOfAlbum = cursor.getColumnIndex(MediaStore.Audio.Artists.NUMBER_OF_ALBUMS);
+
+                do{
+
+                    Artist artist = new Artist();
+                    artist.setArtistKey(cursor.getString(artistKey));
+                    artist.setArtistName(cursor.getString(artistName));
+                    artist.setArtistNumberOfAlbums(cursor.getString(artistNumberOfAlbum));
+
+                    artistList.add(artist);
+
+                }while (cursor.moveToNext());
+                cursor.close();
+
+                Log.d(TAG,"AlbumList: "+artistList.get(0).getArtistName()+"\n"+artistList.get(0).getArtistNumberOfAlbums());
+
+                return artistList;
+            }
+        }
+        return null;
+    }
+
     private void BottomSheetInit() {
         sheetCollapseToggle.setVisibility(View.GONE);
 
@@ -203,6 +245,7 @@ public class MainActivity extends AppCompatActivity {
     private void bottomSheetButtonsAnimationHandler(float offset){
         float value = 1 - offset;
         nowPlayingButtonsLayout.setAlpha(value);
+        innerContainer.setAlpha(offset);
 
         if(value > 0f)
             nowPlayingButtonsLayout.setVisibility(View.VISIBLE);

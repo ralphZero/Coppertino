@@ -1,7 +1,6 @@
 package com.prs.coppertino.adapters;
 
 import android.content.Context;
-import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
@@ -16,10 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.prs.coppertino.R;
-import com.prs.coppertino.models.Album;
 import com.prs.coppertino.models.Song;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -43,7 +39,7 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongsViewHol
     @Override
     public void onBindViewHolder(@NonNull SongsViewHolder holder, int position) {
         Song song = songList.get(position);
-        holder.songCover.setImageResource(R.drawable.placeholder);
+        holder.songCover.setImageResource(R.drawable.song_placeholder);
         holder.songTitle.setText(song.getTitle());
 
         ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(context.getResources().getColor(R.color.colorAccent));

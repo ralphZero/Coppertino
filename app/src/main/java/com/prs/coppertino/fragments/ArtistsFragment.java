@@ -8,9 +8,13 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import com.prs.coppertino.MainActivity;
 import com.prs.coppertino.R;
 import com.prs.coppertino.adapters.ArtistsAdapter;
+import com.prs.coppertino.models.Artist;
 import com.prs.coppertino.models.Song;
 
 import java.util.ArrayList;
@@ -21,8 +25,9 @@ public class ArtistsFragment extends Fragment {
     // Store instance variables
     private String title;
     private int page;
-    List<Song> songList;
+    List<Artist> artistList;
     ArtistsAdapter adapter;
+    RecyclerView rvArtist;
 
     // newInstance constructor for creating fragment with arguments
     public static ArtistsFragment newInstance(int page, String title) {
@@ -51,16 +56,16 @@ public class ArtistsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        songList = new ArrayList<>();
-        adapter = new ArtistsAdapter(getActivity(),songList);
-    }
+        artistList = new ArrayList<>();
 
-    public void fetchListFromParent(List<Song> list){
-        if(isAdded()){
-            songList = list;
-            adapter.notifyDataSetChanged();
-        }
-    }
+        rvArtist = (RecyclerView) view.findViewById(R.id.rvArtist);
+        StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
 
-    public String getTitle(){return title;}
+        adapter = new ArtistsAdapter(getActivity(),artistList);
+
+        rvArtist.setLayoutManager(gridLayoutManager);
+        rvArtist.setAdapter(adapter);
+
+        adapter.addListToAdapter(((MainActivity) getActivity()).GetAllArtistData());
+    }
 }
