@@ -33,6 +33,7 @@ import com.prs.coppertino.adapters.ViewPagerAdapter;
 import com.prs.coppertino.fragments.AlbumFragment;
 import com.prs.coppertino.fragments.ArtistsFragment;
 import com.prs.coppertino.fragments.SongsFragment;
+import com.prs.coppertino.models.Album;
 import com.prs.coppertino.models.Song;
 
 import java.util.ArrayList;
@@ -83,9 +84,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public List<Song> GetAllMusicData() {
+    public List<Song> GetAllSongData() {
         if(hasPermission){
-            Log.d(TAG,"Has permission");
+            Log.d(TAG,"Songs has permission");
 
             List<Song> list = new ArrayList<>();
 
@@ -118,6 +119,42 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG,"List: "+list.size());
 
                 return list;
+            }
+        }
+        return null;
+    }
+
+    public List<Album> GetAllAlbumData(){
+        if(hasPermission){
+            List<Album> albumList = new ArrayList<>();
+
+            ContentResolver resolver = getContentResolver();
+            String[] projection = new String[] {
+                    MediaStore.Audio.Albums._ID,
+                    MediaStore.Audio.Albums.ALBUM,
+                    MediaStore.Audio.Albums.ARTIST,
+            };
+
+            String sortOrder = MediaStore.Audio.Media.ALBUM + " ASC";
+            Cursor cursor = resolver.query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI, projection, null, null, sortOrder);
+            if(cursor!=null && cursor.moveToFirst()){
+                int albumId = cursor.getColumnIndex(MediaStore.Audio.Albums._ID);
+                int albumTitle = cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM);
+                int albumArtist = cursor.getColumnIndex(MediaStore.Audio.Albums.ARTIST);
+
+                do{
+
+                    Album album = new Album();
+                    album.setAlbumId(cursor.getString(albumId));
+                    album.setAlbumTitle(cursor.getString(albumTitle));
+                    album.setAlbumArtist(cursor.getString(albumArtist));
+                    albumList.add(album);
+
+                }while (cursor.moveToNext());
+                cursor.close();
+
+                Log.d(TAG,"AlbumList: "+albumList.get(0).getAlbumTitle()+"\n"+albumList.get(0).getAlbumArtist());
+
             }
         }
         return null;

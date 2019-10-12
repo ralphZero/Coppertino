@@ -8,13 +8,13 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.prs.coppertino.MainActivity;
 import com.prs.coppertino.R;
 import com.prs.coppertino.adapters.AlbumAdapter;
+import com.prs.coppertino.models.Album;
 import com.prs.coppertino.models.Song;
 
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ public class AlbumFragment extends Fragment {
     private int page;
 
     AlbumAdapter adapter;
-    List<Song> songList;
+    List<Album> albumList;
     RecyclerView rvAlbums;
 
     // newInstance constructor for creating fragment with arguments
@@ -58,15 +58,15 @@ public class AlbumFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        songList = new ArrayList<>();
-        adapter = new AlbumAdapter(getActivity(),songList);
+        albumList = new ArrayList<>();
+        adapter = new AlbumAdapter(getActivity(),albumList);
 
         rvAlbums = (RecyclerView) view.findViewById(R.id.rvAlbums);
         StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         rvAlbums.setLayoutManager(gridLayoutManager);
         rvAlbums.setAdapter(adapter);
 
-        adapter.addListToAdapter(((MainActivity) getActivity()).GetAllMusicData());
+        adapter.addListToAdapter(((MainActivity) getActivity()).GetAllAlbumData() );
 
     }
 

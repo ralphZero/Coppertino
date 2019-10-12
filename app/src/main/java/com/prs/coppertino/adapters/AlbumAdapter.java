@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.prs.coppertino.R;
+import com.prs.coppertino.models.Album;
 import com.prs.coppertino.models.Song;
 
 import java.util.List;
@@ -19,11 +20,11 @@ import java.util.List;
 public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder> {
 
     private Context context;
-    private List<Song> songList;
+    private List<Album> albumList;
 
-    public AlbumAdapter(Context context, List<Song> songList) {
+    public AlbumAdapter(Context context, List<Album> list) {
         this.context = context;
-        this.songList = songList;
+        this.albumList = list;
     }
 
     @NonNull
@@ -35,21 +36,21 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.AlbumViewHol
 
     @Override
     public void onBindViewHolder(@NonNull AlbumViewHolder holder, int position) {
-        Song song = songList.get(position);
+        Album a = albumList.get(position);
         holder.albumCover.setImageResource(R.drawable.placeholder);
-        holder.albumTitle.setText(song.getAlbum());
-        holder.albumArtist.setText(song.getArtist());
+        holder.albumTitle.setText(a.getAlbumTitle());
+        holder.albumArtist.setText(a.getAlbumArtist());
     }
 
-    public void addListToAdapter(List<Song> list){
-        songList.clear();
-        songList.addAll(list);
+    public void addListToAdapter(List<Album> list){
+        albumList.clear();
+        albumList.addAll(list);
         notifyDataSetChanged();
     }
 
     @Override
     public int getItemCount() {
-        return songList.size();
+        return albumList.size();
     }
 
 
