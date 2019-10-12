@@ -8,7 +8,10 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.prs.coppertino.MainActivity;
 import com.prs.coppertino.R;
 import com.prs.coppertino.adapters.SongsAdapter;
 import com.prs.coppertino.models.Song;
@@ -23,6 +26,7 @@ public class SongsFragment extends Fragment {
     private int page;
     SongsAdapter adapter;
     List<Song> songList;
+    RecyclerView rvSongs;
 
     // newInstance constructor for creating fragment with arguments
     public static SongsFragment newInstance(int page, String title) {
@@ -54,15 +58,11 @@ public class SongsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         songList = new ArrayList<>();
         adapter = new SongsAdapter(getActivity(),songList);
+        rvSongs = (RecyclerView) view.findViewById(R.id.rvSongs);
 
+        rvSongs.setLayoutManager(new LinearLayoutManager(getActivity(),RecyclerView.VERTICAL,false));
+        rvSongs.setAdapter(adapter);
+
+        adapter.addListToAdapter(((MainActivity) getActivity()).GetAllSongData());
     }
-
-    public void fetchListFromParent(List<Song> list){
-        if(isAdded()){
-            songList = list;
-            adapter.notifyDataSetChanged();
-        }
-    }
-
-    public String getTitle(){return title;}
 }

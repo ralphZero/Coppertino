@@ -66,8 +66,7 @@ public class AlbumFragment extends Fragment {
         rvAlbums.setLayoutManager(gridLayoutManager);
         rvAlbums.setAdapter(adapter);
 
-        adapter.addListToAdapter(((MainActivity) getActivity()).GetAllAlbumData() );
-
+        adapter.addListToAdapter(((MainActivity) getActivity()).GetAllAlbumData());
     }
 
 }

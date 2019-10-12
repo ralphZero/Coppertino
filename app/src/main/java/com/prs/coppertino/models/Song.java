@@ -5,8 +5,7 @@ public class Song {
     private String title;
     private String album;
     private String artist;
-    private String displayName;
-    private String duration;
+    //todo: Album art
 
     public Song() {
     }
@@ -41,21 +40,5 @@ public class Song {
 
     public void setArtist(String artist) {
         this.artist = artist;
-    }
-
-    public String getDisplayName() {
-        return displayName;
-    }
-
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
-    }
-
-    public String getDuration() {
-        return duration;
-    }
-
-    public void setDuration(String duration) {
-        this.duration = duration;
     }
 }

@@ -1,11 +1,15 @@
 package com.prs.coppertino.models;
 
 public class Album {
+
     private String albumId;
     private String albumTitle;
     private String albumArtist;
     //todo: private String albumArt;
-    private String albumNumberOfSongs;
+
+
+    public Album() {
+    }
 
     public String getAlbumId() {
         return albumId;
@@ -29,13 +33,5 @@ public class Album {
 
     public void setAlbumArtist(String albumArtist) {
         this.albumArtist = albumArtist;
-    }
-
-    public String getAlbumNumberOfSongs() {
-        return albumNumberOfSongs;
-    }
-
-    public void setAlbumNumberOfSongs(String albumNumberOfSongs) {
-        this.albumNumberOfSongs = albumNumberOfSongs;
     }
 }

@@ -91,15 +91,14 @@ public class MainActivity extends AppCompatActivity {
             List<Song> list = new ArrayList<>();
 
             String selection = MediaStore.Audio.Media.IS_MUSIC + " != 0";
+            String sortOrder = MediaStore.Audio.Media.DEFAULT_SORT_ORDER;
             ContentResolver resolver = getContentResolver();
             Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-            Cursor songCursor = resolver.query(uri,null,selection,null,null);
+            Cursor songCursor = resolver.query(uri,null,selection,null,sortOrder);
 
             if(songCursor!=null && songCursor.moveToFirst()){
                 int songTitle = songCursor.getColumnIndex(MediaStore.Audio.Media.TITLE);
                 int songArtist = songCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST);
-                int songDisplayName = songCursor.getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME);
-                int songDuration = songCursor.getColumnIndex(MediaStore.Audio.Media.DURATION);
                 int songAlbum = songCursor.getColumnIndex(MediaStore.Audio.Media.ALBUM);
                 int songPath = songCursor.getColumnIndex("_data");
 
@@ -107,9 +106,7 @@ public class MainActivity extends AppCompatActivity {
                     Song song = new Song();
                     song.setTitle(songCursor.getString(songTitle));
                     song.setArtist(songCursor.getString(songArtist));
-                    song.setDisplayName(songCursor.getString(songDisplayName));
                     song.setAlbum(songCursor.getString(songAlbum));
-                    song.setDuration(songCursor.getString(songDuration));
                     song.setPath(songCursor.getString(songPath));
                     list.add(song);
 
@@ -155,6 +152,7 @@ public class MainActivity extends AppCompatActivity {
 
                 Log.d(TAG,"AlbumList: "+albumList.get(0).getAlbumTitle()+"\n"+albumList.get(0).getAlbumArtist());
 
+                return albumList;
             }
         }
         return null;
