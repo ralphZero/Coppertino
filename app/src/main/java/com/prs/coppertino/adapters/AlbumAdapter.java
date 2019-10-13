@@ -1,6 +1,7 @@
 package com.prs.coppertino.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
@@ -14,10 +15,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.prs.coppertino.AlbumInfoActivity;
 import com.prs.coppertino.R;
 import com.prs.coppertino.models.Album;
 
 import java.util.List;
+
+import butterknife.OnClick;
 
 public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder> {
 
@@ -38,7 +42,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.AlbumViewHol
 
     @Override
     public void onBindViewHolder(@NonNull AlbumViewHolder holder, int position) {
-        Album a = albumList.get(position);
+        final Album a = albumList.get(position);
         Glide.with(context)
                 .load(getAlbumArtFromId(a.getAlbumId()))
                 .placeholder(R.drawable.album_placeholder)
@@ -46,6 +50,18 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.AlbumViewHol
         //holder.albumCover.setImageResource(R.drawable.album_placeholder);
         holder.albumTitle.setText(a.getAlbumTitle());
         holder.albumArtist.setText(a.getAlbumArtist());
+
+        View.OnClickListener listenerDetail = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, AlbumInfoActivity.class);
+                intent.putExtra("album_id", a.getAlbumId());
+                context.startActivity(intent);
+            }
+        };
+
+        holder.albumCover.setOnClickListener(listenerDetail);
+        holder.albumCard.setOnClickListener(listenerDetail);
     }
 
     public void addListToAdapter(List<Album> list){

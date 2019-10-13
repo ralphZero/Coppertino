@@ -11,6 +11,7 @@ import androidx.viewpager.widget.ViewPager;
 import android.Manifest;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Typeface;
@@ -81,8 +82,6 @@ public class MainActivity extends AppCompatActivity {
         bottomSheetInit();
 
     }
-
-
 
     public List<Song> getAllSongData() {
         if(hasPermission){

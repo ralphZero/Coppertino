@@ -1,12 +1,12 @@
 package com.prs.coppertino.models;
 
+
 public class Album {
 
     private String albumId;
     private String albumTitle;
     private String albumArtist;
     private String albumArt;
-
 
     public Album() {
     }
