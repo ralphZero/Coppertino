@@ -124,9 +124,9 @@ public class AlbumInfoActivity extends AppCompatActivity {
         albumYear.setText(mAlbumYear);
         String track;
         if(Integer.parseInt(mAlbumNoTrack) > 0)
-            track = mAlbumNoTrack+" track";
-        else
             track = mAlbumNoTrack+" tracks";
+        else
+            track = mAlbumNoTrack+" track";
         albumTrackCount.setText(track);
 
         //getting song data from another thread
@@ -142,10 +142,16 @@ public class AlbumInfoActivity extends AppCompatActivity {
                 if (offset < 1)
                     toolbarLayout.setTitle("");
                 else
-                    toolbarLayout.setTitle("ALBUM_NAME_HERE");
+                    toolbarLayout.setTitle(mAlbumTitle);
 
             }
         });
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return super.onSupportNavigateUp();
     }
 
     @SuppressLint("StaticFieldLeak")
