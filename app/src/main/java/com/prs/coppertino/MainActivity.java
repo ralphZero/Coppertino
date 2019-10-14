@@ -32,6 +32,7 @@ import com.prs.coppertino.adapters.ViewPagerAdapter;
 import com.prs.coppertino.models.Album;
 import com.prs.coppertino.models.Artist;
 import com.prs.coppertino.models.Song;
+import com.prs.coppertino.models.TimeConverter;
 
 import java.util.ArrayList;
 import java.util.List;

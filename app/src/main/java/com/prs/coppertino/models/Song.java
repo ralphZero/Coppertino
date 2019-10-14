@@ -7,6 +7,8 @@ public class Song {
     private String artist;
     private String albumArt;
     private String albumId;
+    private String trackNumber;
+    private String duration;
 
     public Song() {
     }
@@ -57,5 +59,21 @@ public class Song {
 
     public void setAlbumId(String albumId) {
         this.albumId = albumId;
+    }
+
+    public String getTrackNumber() {
+        return trackNumber;
+    }
+
+    public void setTrackNumber(String trackNumber) {
+        this.trackNumber = trackNumber;
+    }
+
+    public String getDuration() {
+        return duration;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
     }
 }

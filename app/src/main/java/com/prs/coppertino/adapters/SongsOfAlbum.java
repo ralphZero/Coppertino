@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.prs.coppertino.R;
 import com.prs.coppertino.models.Song;
+import com.prs.coppertino.models.TimeConverter;
+import com.prs.coppertino.models.TrackDataConverter;
 
 import java.util.List;
 
@@ -34,11 +36,15 @@ public class SongsOfAlbum extends RecyclerView.Adapter<SongsOfAlbum.SongHolder> 
     @Override
     public void onBindViewHolder(@NonNull SongHolder holder, int position) {
         Song song = songList.get(position);
+        holder.trackNumber.setText(TrackDataConverter.Convert(song.getTrackNumber()));
+        holder.trackTitle.setText(song.getTitle());
+        holder.trackDuration.setText(TimeConverter.ConvertToSeconds(song.getDuration()));
     }
 
     public void addListToAdapter(List<Song> list){
         songList.clear();
         songList.addAll(list);
+        notifyDataSetChanged();
     }
 
     @Override
